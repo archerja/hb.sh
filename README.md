@@ -1,7 +1,7 @@
 hb.sh
 =======
 
-Latest version = 0.3
+Latest version = 0.4
 
 Simple bash script to convert a directory of videos to a Roku compatible format.
 
@@ -18,7 +18,7 @@ Examples
 ```
 $ hb.sh -h
  
-Handbrake CL Quick Convert version 0.3
+Handbrake CL Quick Convert version 0.4
 hb.sh will convert all videos in a directory
         of a certain kind to a Roku compatible
         format using HandBrake command line.
@@ -52,7 +52,7 @@ Place hb.sh in your '/home/user/bin' folder to have access to it anywhere on you
 Author
 ======
 
-Joseph Archer (C) 2015
+Joseph Archer (C) 2017
 
 
 License
