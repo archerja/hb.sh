@@ -1,8 +1,8 @@
 #!/bin/bash
 
 program='Handbrake CL Quick Convert'
-version='0.2'
-vids='avi mkv mp4 wmv'
+version='0.3'
+vids='avi mkv mp4 wmv mpg'
 ch6=
 
 # check for at least 2 arguments
@@ -42,10 +42,10 @@ do
       if [ $ch6 ];
         then
 #        echo "* with 5.1 audio..."
-        HandBrakeCLI -i "$i" --no-dvdnav -f mp4 -e x264 -q 20 -r 23.976 -5 -b 3200 -B 160 -E faac,copy:ac3 -6 stereo,6ch -o "${i%.*}.m4v"
+        HandBrakeCLI -i "$i" --no-dvdnav -f av_mp4 -e x264 -q 20 -r 23.976 -5 -b 3200 -B 160 -E faac,copy:ac3 -6 stereo,6ch -o "${i%.*}.m4v"
       else
 #        echo "* no 5.1 audio..."
-        HandBrakeCLI -i "$i" --no-dvdnav -f mp4 -e x264 -q 20 -r 23.976 -5 -b 3200 -B 160 -E faac -o "${i%.*}.m4v"
+        HandBrakeCLI -i "$i" --no-dvdnav -f av_mp4 -e x264 -q 20 -r 23.976 -5 -b 3200 --cfr -B 160 -E av_aac -o "${i%.*}.m4v"
       fi
     elif [ $1 = '29' ];
       then
@@ -53,10 +53,10 @@ do
       if [ $ch6 ];
         then
 #        echo "* with 5.1 audio..."
-        HandBrakeCLI -i "$i" --no-dvdnav -f mp4 -e x264 -q 20 -r 29.97 -5 -b 3200 -B 160 -E faac,copy:ac3 -6 stereo,6ch -o "${i%.*}.m4v"
+        HandBrakeCLI -i "$i" --no-dvdnav -f av_mp4 -e x264 -q 20 -r 29.97 -5 -b 3200 -B 160 -E faac,copy:ac3 -6 stereo,6ch -o "${i%.*}.m4v"
       else
 #        echo "* no 5.1 audio..."
-        HandBrakeCLI -i "$i" --no-dvdnav -f mp4 -e x264 -q 20 -r 29.97 -5 -b 3200 -B 160 -E faac -o "${i%.*}.m4v"
+        HandBrakeCLI -i "$i" --no-dvdnav -f av_mp4 -e x264 -q 20 -r 29.97 -5 -b 3200 --cfr -B 160 -E av_aac -o "${i%.*}.m4v"
       fi
     else
       echo "not a valid framerate"
@@ -67,4 +67,3 @@ do
 done
 
 # bye
-
