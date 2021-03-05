@@ -1,14 +1,20 @@
 #!/bin/bash
+#
+# Convert a directory of videos to Roku compatible
 
-appname="Handbrake CL Quick Convert"
-version="0.5"
+##############################
+# set variables
+##############################
+appname="Handbrake CLI Quick Convert"
+version="0.6"
 
-vids="avi mkv mp4 wmv mpg"
+vids="avi mkv mp4 wmv mpg webm"
+wids="720 1280"
 
 shortname=$(basename $0)
 fullname=$0
-oneliner="usage: $shortname -f [23 or 29] -v [$vids] [optional: -6 -w]"
-w7=
+oneliner="usage: $shortname -f [23 or 29] -v [$vids] [optional: -6 -w [$wids]]"
+wd=
 ch6=
 frame=
 video=
@@ -16,12 +22,16 @@ realframe=
 realwidth=
 realchannel=
 
+##############################
 # display name and version
+##############################
       echo ""
       echo "    $appname"
       echo "    $shortname version $version"
 
-# check for at least 2 arguments, or help
+##############################
+# check for at least 2 args, or help
+##############################
 if [ "$#" -lt 2 ]; then
    if [ $1 ] && [ $1 == '-h' ]; then
       echo ""
@@ -31,12 +41,15 @@ if [ "$#" -lt 2 ]; then
       echo ""
       echo "    $shortname must have at least 2 arguments."
       echo "    Try help with $shortname -h"
+      echo ""
       exit 1
    fi
 fi
 
-# set variables or show help
-while getopts :hf:aw6v: opt; do
+##############################
+# get arguments or show help
+##############################
+while getopts :hf:aw:6v: opt; do
   case $opt in
   h)
       echo "    (NOTE: HandBrakeCLI must be installed for script to work)"
@@ -49,10 +62,10 @@ while getopts :hf:aw6v: opt; do
       echo ""
       echo "    required:"
       echo "          -f 23|29 =  23 (for 23.976) or 29 (for 29.97)"
-      echo "          -v mkv   =  any videos of: ($vids)"
+      echo "          -v video =  any video types of: ($vids)"
       echo ""
       echo "    optional:"
-      echo "          -w  =  change width to 720"
+      echo "          -w  =  change width to either: ($wids)"
       echo "          -6  =  optional 5.1 [for 6 channel]"
       echo "                     [default is stereo]"
       echo ""
@@ -65,7 +78,8 @@ while getopts :hf:aw6v: opt; do
       video=$OPTARG
       ;;
   w)
-      w7=1
+      width=$OPTARG
+      wd=1
       ;;
   6)
       ch6=1
@@ -84,7 +98,11 @@ done
 
 shift $((OPTIND - 1))
 
-# list arguments
+##############################
+# validate and list arguments
+##############################
+echo "---------------"
+echo "-- arguments --"
 echo "---------------"
 if [ $frame ]; then
     if [ $frame == 23 ]; then
@@ -112,20 +130,29 @@ if [ "$video" ]; then
     exit 1
 fi
 
-if [ "$w7" ]; then echo "    Argument -w specified";  fi
+if [ "$wd" ]; then 
+    if [[ $wids == *$width* ]]; then
+        echo "    Argument -w specified with $width"
+    else
+        echo "    Argument -w $width is invalid!"
+        exit 1
+    fi
+fi
+
 if [ "$ch6" ]; then echo "    Argument -6 specified";  fi
 echo "---------------"
 
+##############################
 # set parameters
-
+##############################
 if [ $frame == 23 ]; then
     realframe=23.976
 else
     realframe=29.97
 fi
 
-if [ $w7 ]; then
-    realwidth="-w 720"
+if [ $wd ]; then
+    realwidth="-w $width"
 fi
 
 if [ $ch6 ]; then
@@ -134,12 +161,15 @@ else
     realchannel="--cfr -B 160 -E av_aac"
 fi
 
+##############################
 # finally begin work
 # loop through directory
-
+##############################
 for i in *.$video
 do
   HandBrakeCLI -i "$i" --no-dvdnav -f av_mp4 -e x264 -q 20 $realwidth -r $realframe -5 -b 3200 $realchannel -o "${i%.*}.m4v"
 done
 
+##############################
 # bye
+##############################
