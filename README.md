@@ -51,12 +51,12 @@ $ hb.sh -h
 
 ```
 
-**convert all *.avi in current directory to *.m4v with stereo audio and 23.976 video frame rate**
+convert all *.avi in current directory to *.m4v with stereo audio and 23.976 video frame rate
 ```
 $ hb.sh -f 23 -v avi
 ```
 
-**convert all *.mkv in current directory to *.m4v with 5.1 and stereo audio, a 29.97 frame rate, and a video width of 720**
+convert all *.mkv in current directory to *.m4v with 5.1 and stereo audio, a 29.97 frame rate, and a video width of 720
 ```
 $ hb.sh -f 29 -v mkv -6 -w 720
 ```
